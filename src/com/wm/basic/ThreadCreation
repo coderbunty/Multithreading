@@ -1,0 +1,65 @@
+Thread is an independent sequential path of execution within a program. Many threads can run concurrently within a program.
+Threads make the runtime environment asynchronous, allowing different tasks to be performed concurrently.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+Every thread in Java is created & controlled by a unique object of the java.lang.Thread class.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+Runtime environment distinguishes between user threads & daemon threads. As long as a user thread is alive, JVM doesn't terminate.
+Daemon threads are stopped if there are no more user threads running, that means the program gets terminated. Daemon threads
+exist only to serve user threads.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+When a standalone application is run, a user thread is automatically created to execute the main() of the application.
+This thread is called the main thread, if no other user threads are spawned, the program terminates when main() finishes executing.
+All other threads, called child threads, are spawned from the main thread, inheriting its user thread status. With these
+child user threads, even when the main thread finishes execution, the program still keeps running until all user threads are
+done executing.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+Using the setDaemon(boolean) method of the Thread class, the child thread can be marked as either user thread or daemon thread,
+and this must be set before the thread is started. By default it is user thread.
+If a thread is marked daemon, then if main thread finishes its execution, all daemon threads die, program finishes.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+A runnable interface has one abstract run() method.
+public interface Runnable {
+    void run();
+}
+Thread creation mandates implementing this Runnable interface in one way or the other. Code defined in the run() is what the
+thread executes during its lifecycle. In other words, the code ni run() defines an independent path of execution, thereby
+defining the entry & exit of the thread. Thread ends when the run() method ends, either by normal completion or by throwing
+an uncaught exception.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+Thread creation using a class that implements Runnable interface.
+class Runner implements Runnable {
+    public void run() {}
+}
+Thread t1 = new Thread(new Runner());
+
+Here instead of creating a Runner class which implements Runnable interface, we can also use an anonymous class which implements
+Runnable interface.
+Thread t1 = new Thread(new Runnable() {
+    @Override
+    public void run() {}
+});
+----------------------------------------------------------------------------------------------------------------------------------
+
+Thread creation using a class that extends java.lang.Thread class. java.lang.Thread class implements Runnable interface.
+So, we need to implement the run() method in the class now.
+class Runner extends Thread {
+    public void run() {}
+}
+Runner t2 = new Runner();
+
+So, one way or the other, we need to implement Runnable interface & provide an implementation to run() method to create a thread.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
