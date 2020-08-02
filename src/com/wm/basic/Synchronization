@@ -1,0 +1,59 @@
+Threads share the same memory space, i.e., they can share resources. However, there are critical situations, where it is
+desirable that only one thread at a time has access to the shared resource.
+
+
+A lock (or a monitor) is used to synchronize access to a shared resource . A lock can be associated with a shared resource.
+Threads gain access to a shared resource by first acquiring the lock associated with the resource. At any given time, at
+most one thread can hold the lock & thereby have access to the shared resource. A lock thus implements mutual exclusion (mutex).
+
+
+In Java, all objects have a lock, that means lock from any Java object can be used to implement mutual exclusion.
+
+
+Object lock mechanism enforces the following rules of synchronization:
+ - a thread must acquire the object lock associated with a shared resource, before it can enter the shared resource. The
+   runtime system ensures that no other thread can enter a shared resource if another thread already holds the object lock
+   associated with it. If the thread cannot immediately acquire the object lock, it is blocked, i.e., it must wait for the
+   lock to become available.
+ - when a thread exits a shared resource, the runtime system ensures that the object lock is also relinquished. If another
+   thread is waiting for this object lock, it can try to acquire the lock in order to gain access to the shared resource.
+
+
+2 ways in which execution of code can be synchronized
+ - by declaring 'synchronized' methods
+ - by having 'synchronized' code blocks
+
+If the methods of an object should only be executed by one thread at a time, then the declaration of all such methods
+should be specified by the keyword synchronized. The synchronized method ny default uses the current object's (this) lock.
+For eg, in Stack implementation which can be accessed by multiple threads at a time, both push() & pop() methods must be
+synchronized as these operations are mutually exclusive. => if thread t1 has got the object's lock & is pushing some data,
+other threads cannot pop or push, which will prevent possible discrepancy. After pushing data, thread t1 can pop data as
+it still has the lock.
+
+
+Execution of synchronized methods of an object is synchronized on the lock of the object (this), the synchronized block
+allows execution of arbitrary code to be synchronized on the lock of an arbitrary object.
+
+
+/*
+ * Every Java object created, including every Class loaded, has an associated lock or monitor.
+ * Putting code inside a synchronized block makes the compiler append instructions to acquire the lock on the "specified object" before executing the code, and release it afterwards (either because the code finishes normally or abnormally).
+ * Between acquiring the lock and releasing it, a thread is said to "own" the lock.
+ * At the point of Thread A wanting to acquire the lock, if Thread B already owns the it, then Thread A must wait for Thread B to release it.
+ */
+
+
+/*
+ * There are 2 ways in which we can use the synchronized keyword
+ * either as a keyword in a method or use a synchronized block specifying the object whose lock it will use
+ * if we use 'synchronized' keyword on a method, then by default the current object's (this) lock will be used
+ * if there are multiple critical sections in the code of same class, then only one thread can get hold of the
+   object's lock & execute one critical code section. Other threads, though idle, will not be able to obtain any
+   locks as there are none left
+ * this will lead to slower performance of the code
+ * to overcome this, we can create multiple dummy objects and use their locks in the synchronized blocks.
+ * with this, there will be different locks for different critical sections, & other threads can get hold of the lock of
+   other critical sections, but for this the shared resources should be different in different critical sections.
+   In the case of a stack, we wold want to have one lock for both push & pop critical section as the same shared resource
+   is being modified in both critical sections.
+ */
