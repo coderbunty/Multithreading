@@ -35,8 +35,8 @@ public class ThreadCreation1 {
 
         // user thread
         // thread creation using a class that implements Runnable interface
-        Thread runner1 = new Thread(new Runner());
-        runner1.start();
+        Thread runner1 = new Thread(new Runner(), "Slow runner");   // thread name can also be passed as an argument
+        runner1.start();        // this method spawns a new thread
 
         // thread creation using a anonymous class that implements Runnable interface
         Thread runner2 = new Thread(new Runnable() {
