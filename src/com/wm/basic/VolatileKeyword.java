@@ -19,6 +19,7 @@ import java.util.Scanner;
  * 	- Access to the variable acts as though it is enclosed in a synchronized block, synchronized on itself. But as accessing
  *    a volatile variable performs no locking and so cannot cause the executing thread to block, making volatile variables a
  *    lighter-weight synchronization mechanism.
+ * https://www.baeldung.com/java-volatile, https://www.geeksforgeeks.org/volatile-keyword-in-java/
  */
 
 class Runnerr extends Thread {
