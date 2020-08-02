@@ -29,7 +29,7 @@ class Runner implements Runnable {
     }
 }
 
-public class ThreadCreation1 {
+public class ThreadCreation {
     public static void main(String[] args) {
         System.out.println("Thread creation techniques..");
 
