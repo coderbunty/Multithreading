@@ -4,7 +4,7 @@ public class Stack<K extends Comparable<K>> {
 
     private K[] arr;
     private int size;
-    private int index = -1;
+    private int topOfStack = -1;
 
     public Stack(int size) {
         this.size = size;
@@ -21,43 +21,54 @@ public class Stack<K extends Comparable<K>> {
                 }
             }
         }
-        return arr[index--];
+        K retVal = arr[topOfStack];
+        topOfStack--;
+        notify();
+        return retVal;
     }
 
     public void push(K data) {
-        if (isFull())
-            throw new RuntimeException("Stack is full.");
-        arr[++index] = data;
+        synchronized(this) {
+            while (isFull()) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            arr[++topOfStack] = data;
+            notify();
+        }
     }
-
-    /*public K pop() {
-        if (this.isEmpty())
-            throw new RuntimeException("Stack is empty.");
-        return arr[index--];
-    }
-
-    public void push(K data) {
-        if (isFull())
-            throw new RuntimeException("Stack is full.");
-        arr[++index] = data;
-    }*/
 
     public K peek() {
         if (this.isEmpty())
             throw new RuntimeException("Stack is empty.");
-        return arr[index];
+        return arr[topOfStack];
     }
 
     public boolean isFull() {
-        if (index == arr.length - 1)
+        if (topOfStack == arr.length - 1)
             return true;
         return false;
     }
 
     public boolean isEmpty() {
-        if (index == -1)
+        if (topOfStack == -1)
             return true;
         return false;
     }
+
+    /*public K pop() {
+        if (this.isEmpty())
+            throw new RuntimeException("Stack is empty.");
+        return arr[topOfStack--];
+    }
+
+    public void push(K data) {
+        if (isFull())
+            throw new RuntimeException("Stack is full.");
+        arr[++topOfStack] = data;
+    }*/
 
 }
