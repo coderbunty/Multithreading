@@ -4,7 +4,7 @@ public class Stack<K extends Comparable<K>> {
 
     private K[] arr;
     private int size;
-    private int topOfStack = -1;
+    private volatile int topOfStack = -1;
 
     public Stack(int size) {
         this.size = size;
@@ -13,30 +13,38 @@ public class Stack<K extends Comparable<K>> {
 
     public K pop() {
         synchronized (this) {
+            System.out.println(Thread.currentThread() + ": popping");
             while (this.isEmpty()) {
                 try {
+                    System.out.println(Thread.currentThread() + ": waiting to pop");
                     wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println(Thread.currentThread() + " interrupted");
+                    //e.printStackTrace();
                 }
             }
+            K retVal = arr[topOfStack];
+            topOfStack--;
+            System.out.println(Thread.currentThread() + ": notifying after popping");
+            notify();
+            return retVal;
         }
-        K retVal = arr[topOfStack];
-        topOfStack--;
-        notify();
-        return retVal;
     }
 
     public void push(K data) {
         synchronized(this) {
+            System.out.println(Thread.currentThread() + ": pushing");
             while (isFull()) {
                 try {
+                    System.out.println(Thread.currentThread() + ": waiting to push");
                     wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println(Thread.currentThread() + " interrupted");
+                    //e.printStackTrace();
                 }
             }
             arr[++topOfStack] = data;
+            System.out.println(Thread.currentThread() + ": notifying after pushing");
             notify();
         }
     }
