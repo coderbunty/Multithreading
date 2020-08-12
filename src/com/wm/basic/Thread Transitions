@@ -20,3 +20,122 @@ Thread class provides the getState() to determine the state of the current threa
 NEW,   RUNNABLE,    BLOCKED,                         WAITING,                     TIMED_WAITING,         TERMINATED
 (New)  (Running)  (Blocked for I/O,                (Waiting for notify,           (Sleeping, WAITING)      (Dead)
                    Blocked for lock acquisition)    Blocked for join completion)
+
+------------------------------------------------------------------------------------------------------------------------
+
+Thread priorities
+Threads are assigned priorities that the thread scheduler can use to determine how the threads will be scheduled.
+The thread scheduler favors giving CPU time to the thread with the highest priority in the Ready-to-run state.
+Priorities are integer values from 1 (lowest priority, Thread.MIN_PRIORITY) to 10 (highest priority, Thread.MAX_PRIORITY).
+Default priority is 5. A thread inherits the priority of its parent thread. setPriority() & getPriority().
+(setPriority() is an advisory method, meaning that it provides a hint from the program to JVM, which the JVM is in no
+way obliged to honor)
+
+------------------------------------------------------------------------------------------------------------------------
+
+Thread scheduler
+Schedulers in JVM implementations usually employ one of the following two strategies,
+1. Preemptive scheduling - if a thread with higher priority than the current running thread moves to the Ready-to-run state,
+                           the current thread can be preempted to let the higher priority thread execute.
+
+2. Time sliced or Round robin scheduling - running thread is allowed to run for a fixed time, after which it moves to the
+                                           Ready-to-run state to await its turn to run again.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Yielding
+After its start() method has been called, the thread starts life in the Ready-to-run state. Once in the Ready-to-run state,
+the thread is eligible for running, i.e., it waits for its turn to get CPU time. The thread scheduler decides which thread
+runs and for how long.
+A call to the static method yield(), defined in the Thread class, may cause the current thread in the Running state to
+transit to the Ready-to-run state, thus relinquishing the CPU. If this happens, the thread is then at the mercy of the
+thread scheduler as to when it will run again.
+(yield() is also an advisory method, no guarantee that JVM will carry out the call's bidding)
+
+------------------------------------------------------------------------------------------------------------------------
+
+Sleeping & Waking up
+A call to the static method sleep() in the Thread class will cause the currently running thread to temporarily pause its
+execution and transit to the Sleeping state. This method does not relinquish any lock that the thread might have.
+The thread will sleep for at least the time specified in its argument, before transitioning to the Ready-to-run state
+where it takes its turn to run again. If a thread is interrupted while sleeping, it will throw an InterruptedException
+when it awakes and gets to execute.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Waiting & Notifying provide means of communication between threads that synchronize on the same object. The threads execute
+wait() & notify() (or notifyAll()) methods on the shared object for this purpose. These final methods are defined in the
+Object class, & therefore inherited by all the objects. These methods can only be executed on an object whose lock the
+thread holds (in other words, in synchronized code), otherwise, the call will return an IllegalMonitorStateException.
+
+final void wait()
+A thread invokes the wait() method on the object whose lock it holds. The thread is added to the wait set of the current object.
+final void notify(), final void notifyAll()
+A thread invokes a notification method on the current object whose lock it holds to notify thread(s) that are in the wait set of the object.
+
+A thread usually calls the wait() method on the object whose lock it holds because a condition for its continued execution was not met.
+The thread leaves the Running state and transits to the Waiting-for-notification state. There it waits for this condition to occur.
+The thread relinquishes ownership of the object lock.
+
+Transition to the Waiting-for-notification state and relinquishing the object lock are completed as one atomic (non-interruptible) operation.
+The releasing of the lock of the shared object by the thread allows other threads to run and execute synchronized code on the same object after acquiring its lock.
+
+Note that the waiting thread relinquishes only the lock of the object on which the wait() method was invoked. It does not relinquish any
+other object locks that it might hold, which will remain locked while the thread is waiting.
+
+Invoking the notify() method on an object wakes up a single thread that is waiting for the lock of this object. The selection of a thread to awaken is
+dependent on the thread policies implemented by the JVM. On being notified, a waiting thread first transits to the Blocked-for-lock-acquisition state
+to acquire the lock on the object, and not directly to the Ready-to-run state. The thread is also removed from the wait set of the object.
+
+Note that the object lock is not relinquished when the notifying thread invokes the notify() method. The notifying thread relinquishes the lock at
+its own discretion, and the awakened thread will not be able to run until the notifying thread relinquishes the object lock.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Timed-out
+The wait() call specified the time the thread should wait before being timed out, if it was not awakened by being notified.
+The awakened thread competes in the usual manner to execute again. Note that the awakened thread has no way of knowing whether
+it was timed out or woken up by one of the notification methods.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Interrupted
+This means that another thread invoked the interrupt() method on the waiting thread. The awakened thread is enabled as previously
+explained, but the return from the wait() call will result in an InterruptedException if and when the awakened thread finally gets
+a chance to run. The code invoking the wait() method must be prepared to handle this checked exception.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Joining
+A thread can invoke the overloaded method join() on another thread in order to wait for the other thread to complete its
+execution before continuing, i.e., the first thread waits for the second thread to join it after completion. A running thread
+t1 invokes the method join() on a thread t2. The join() call has no effect if thread t2 has already completed. If thread t2
+is still alive, thread t1 transits to the Blocked-for-join-completion state. Thread t1 waits in this state until one of these
+events occur,
+  - Thread t2 completes: In this case thread t1 moves to the Ready-to-run state, and when it gets to run, it will continue
+    normally after the call to the join() method.
+  - Thread t1 is timed out: The time specified in the argument of the join() method call has elapsed without thread t2 completing.
+    In this case as well, thread t1 transits to the Ready-to-run state. When it gets to run, it will continue normally after the call to the join() method.
+  - Thread t1 is interrupted: Some thread interrupted thread t1 while thread t1 was waiting for join completion. Thread t1 transits to the Ready-to-run state,
+    but when it gets to execute, it will now throw an InterruptedException.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Blocking for I/O
+A running thread, on executing a blocking operation requiring a resource (like a call to an I/O method), will transit to
+the Blocked-for-I/O state. The blocking operation must complete before the thread can proceed to the Ready-to-run state.
+An example is a thread reading from the standard input terminal which blocks until input is provided:
+    int input = System.in.read();
+
+------------------------------------------------------------------------------------------------------------------------
+
+Thread termination
+A thread can transit to the Dead state from the Running or the Ready-to-run states. The thread dies when it completes its
+run() method, either by returning normally or by throwing an exception. Once in this state, the thread cannot be resurrected.
+There is no way the thread can be enabled for running again, not even by calling the start() method again on the thread object.
+
+------------------------------------------------------------------------------------------------------------------------
+
+A deadlock is a situation where a thread is waiting for an object lock that another thread holds, and this second thread
+is waiting for an object lock that the first thread holds. Since each thread is waiting for the other thread to relinquish
+a lock, they both remain waiting forever in the Blocked-for-lock-acquisition state. The threads are said to be deadlocked.
