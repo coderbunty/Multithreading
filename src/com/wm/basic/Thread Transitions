@@ -1,0 +1,22 @@
+Thread States
+a) New state - Thread has been created, but it has not started yet.
+
+b) Ready-to-run state - Thread's start() method is called, it is in this state when the thread starts its life.
+
+c) Running state - Scheduler has chosen this thread to execute, it is having its CPU time.
+
+d) Dead state - Thread reaches this state when the execution finishes or if it gets terminated abruptly.
+
+e) Non-runnable states - Depending on certain circumstances, the thread can transition into this state. A thread remains
+                         in this state until a special transition occurs. The thread doesn't directly go to the Running
+                         state from a non-runnable state, but transits first to Ready-to-run state.
+       Sleeping - thread sleeps for a specified amount of time.
+       Blocked for I/o - thread waits for a blocking operation to complete
+       Blocking for join completion - thread awaits completion of another thread
+       Waiting for notification - thread awaits notification from another thread
+       Blocked for lock acquisition - thread waits to acquire the lock of an object
+
+Thread class provides the getState() to determine the state of the current thread. The method returns a constant of type Thread.State.
+NEW,   RUNNABLE,    BLOCKED,                         WAITING,                     TIMED_WAITING,         TERMINATED
+(New)  (Running)  (Blocked for I/O,                (Waiting for notify,           (Sleeping, WAITING)      (Dead)
+                   Blocked for lock acquisition)    Blocked for join completion)
