@@ -1,3 +1,5 @@
+https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html
+
 Thread is an independent sequential path of execution within a program. Many threads can run concurrently within a program.
 Threads make the runtime environment asynchronous, allowing different tasks to be performed concurrently.
 

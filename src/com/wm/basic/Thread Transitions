@@ -114,10 +114,11 @@ is still alive, thread t1 transits to the Blocked-for-join-completion state. Thr
 events occur,
   - Thread t2 completes: In this case thread t1 moves to the Ready-to-run state, and when it gets to run, it will continue
     normally after the call to the join() method.
-  - Thread t1 is timed out: The time specified in the argument of the join() method call has elapsed without thread t2 completing.
-    In this case as well, thread t1 transits to the Ready-to-run state. When it gets to run, it will continue normally after the call to the join() method.
-  - Thread t1 is interrupted: Some thread interrupted thread t1 while thread t1 was waiting for join completion. Thread t1 transits to the Ready-to-run state,
-    but when it gets to execute, it will now throw an InterruptedException.
+  - Thread t1 is timed out: The time specified in the argument of the join() method call has elapsed without thread t2
+    completing. In this case as well, thread t1 transits to the Ready-to-run state. When it gets to run, it will continue
+    normally after the call to the join() method.
+  - Thread t1 is interrupted: Some thread interrupted thread t1 while thread t1 was waiting for join completion.
+    Thread t1 transits to the Ready-to-run state, but when it gets to execute, it will now throw an InterruptedException.
 
 ------------------------------------------------------------------------------------------------------------------------
 
