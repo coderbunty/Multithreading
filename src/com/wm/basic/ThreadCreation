@@ -34,7 +34,7 @@ public interface Runnable {
     void run();
 }
 Thread creation mandates implementing this Runnable interface in one way or the other. Code defined in the run() is what the
-thread executes during its lifecycle. In other words, the code ni run() defines an independent path of execution, thereby
+thread executes during its lifecycle. In other words, the code in run() defines an independent path of execution, thereby
 defining the entry & exit of the thread. Thread ends when the run() method ends, either by normal completion or by throwing
 an uncaught exception.
 
@@ -55,7 +55,7 @@ Thread t1 = new Thread(new Runnable() {
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Thread creation using a class that extends java.lang.Thread class. java.lang.Thread class implements Runnable interface.
-So, we need to implement the run() method in the class now.
+So, we need can override the run() method in the class now.
 class Runner extends Thread {
     public void run() {}
 }
