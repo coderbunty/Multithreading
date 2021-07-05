@@ -1,8 +1,11 @@
 Tomcat threads are the same as every other thread in the JVM (Java threads). In most modern OSs and JVMs, a JVM thread maps directly to an OS thread
-(which cam be implemented differently depending upon the OS, of course).
+(which can be implemented differently depending upon the OS, of course).
 
-Any Java program can start any number of threads (more the threads, good to have more number of cores & processors available).
-If for a limited number of cores / processors, we keep on increasing the number of threads in the expectation of increase in performance, that is not
+As we know, threads are not physical resources, they are just a separate flow of execution in addition to the main flow. They bring in concurrency if there is
+only 1 core available, & they can bring in both concurrency & parallelism if there are multiple cores.
+
+Any Java program can start any number of threads (more the threads, good to have more number of cores available).
+If for a limited number of cores, if we keep on increasing the number of threads in the expectation of increase in performance, that is not
 going to happen. The main reason is the time taken in extremely frequent context switching will hamper the performance.
 
 
