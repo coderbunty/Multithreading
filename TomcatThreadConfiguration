@@ -1,3 +1,11 @@
+Tomcat threads are the same as every other thread in the JVM (Java threads). In most modern OSs and JVMs, a JVM thread maps directly to an OS thread
+(which cam be implemented differently depending upon the OS, of course).
+
+Any Java program can start any number of threads (more the threads, good to have more number of cores & processors available).
+If for a limited number of cores / processors, we keep on increasing the number of threads in the expectation of increase in performance, that is not
+going to happen. The main reason is the time taken in extremely frequent context switching will hamper the performance.
+
+
 Apache Tomcat is one of the more popular server implementations for Java web applications and runs in a Java Virtual Machine (JVM).
 
 Connectors:
