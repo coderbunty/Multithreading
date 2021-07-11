@@ -5,6 +5,7 @@ package com.wm.advanced;
     1. additionally supports operations that wait for the queue to become non-empty when retrieving an element, and wait for space to become available in the queue when storing an element.
     2. only one thread at a time can use the queue (enqueue or dequeue), other threads wait to acquire the lock.
   Basically, BlockingQueue is mainly used to implement producer / consumer pattern, where there are multiple producers / consumers accessing one resource, we need a thread safe arrangement.
+  Eg. used in ExecutorService thred pool (LinkedBlockingQueue<Runnable>)
 
   BlockingQueue methods come in four forms, with different ways of handling operations that cannot be satisfied immediately,
   but may be satisfied at some point in the future: one throws an exception, the second returns a special value (either null or false, depending on the operation),
