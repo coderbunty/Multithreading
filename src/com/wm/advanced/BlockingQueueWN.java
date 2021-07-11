@@ -1,7 +1,12 @@
 package com.wm.advanced;
 
 /*
-  Blocking queue implementation using wait() & notify()
+  Blocking queue - A Queue that additionally supports operations that wait for the queue to become non-empty when retrieving an element,
+  and wait for space to become available in the queue when storing an element.
+  BlockingQueue methods come in four forms, with different ways of handling operations that cannot be satisfied immediately,
+  but may be satisfied at some point in the future: one throws an exception, the second returns a special value (either null or false, depending on the operation),
+  the third blocks the current thread indefinitely until the operation can succeed, and the fourth blocks for only a given maximum time limit before giving up.
+  Blocking Queue implementation using wait() & notify().
 */
 public class BlockingQueueWN<T extends Comparable<T>> {
 
