@@ -90,6 +90,11 @@ to acquire the lock on the object, and not directly to the Ready-to-run state. T
 Note that the object lock is not relinquished when the notifying thread invokes the notify() method. The notifying thread relinquishes the lock at
 its own discretion, and the awakened thread will not be able to run until the notifying thread relinquishes the object lock.
 
+When notifyAll() method is invoked for a particular object's lock, all the threads waiting on that thread's lock move to Blocked-for-lock-acquisition state.
+The threads which were still trying to enter the synchronized block, but couldn't, are also in Blocked-for-lock-acquisition state. Once a thread having the lock
+relinquishes it, all these threads in Blocked-for-lock-acquisition state compete for the lock, one of them gets the lock & moves to Ready-to-run state, the others
+are still in Blocked-for-lock-acquisition state.
+
 ------------------------------------------------------------------------------------------------------------------------
 
 Timed-out
