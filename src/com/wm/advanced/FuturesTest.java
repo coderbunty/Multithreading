@@ -17,7 +17,24 @@ import java.util.concurrent.Future;
 public class FuturesTest {
 
   public static void main(String[] args) {
+    // using Futures from ExecutorService
     new FuturesTest().startTasks();
+
+    // using CompletableFuture
+    CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      return "Java Multithreading - concurrent & parallel programming.";
+    });
+
+    try {
+      System.out.println(future.get());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void startTasks() {
