@@ -42,6 +42,10 @@ public class CustomFixedThreadPoolExecutor implements Executor {
       e.printStackTrace();
     }
   }
+  
+  public void shutdown() {
+    // to be implemented - need to stop all the running threads (one option is thread.interrupt()) 
+  }
 
   private class Worker extends Thread {
 
