@@ -30,3 +30,5 @@ Concurrency is about dealing with lots of things at once. Parallelism is about d
 Last but not the least, you'll find literature describing concurrency as a property of a program or a system whereas parallelism as a runtime behaviour
 of executing multiple tasks.
 
+Resources:
+https://stackoverflow.com/questions/38733670/can-a-single-process-run-in-multiple-cores
