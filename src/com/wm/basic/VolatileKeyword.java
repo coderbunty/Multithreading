@@ -4,6 +4,10 @@ import java.util.Scanner;
 
 /*
  * Volatile variables ensure that the updates to the variable are propagated predictably to other threads.
+ * Threads of a process share the resources allocated to that particular process, including memory address space (Main memory / RAM).
+   Now these different threads of a process can run on different cores also. As CPU caches some frequently used data from main memory in to L1 / L2 / L3 cache on each cores,
+   threads running on different cores using common variables / data might miss on the updates from other core threads. To solve this, if a variable is declared volatile,
+   then CPU will fetch the data for the variable directly from the main memory & not cache it in L1/L2/L3 caches.
  * When a field is declared volatile, the compiler & runtime are put on notice that this variable is shared and that
    other operations on it should not be reordered with other memory options.
  * Volatile variables are not cached in registers or in caches where they are hidden from other processors, so a read of
