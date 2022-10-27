@@ -27,6 +27,10 @@ public class BlockingQueueWN<T extends Comparable<T>> {
   public synchronized void insert(T data) throws InterruptedException {
     System.out
         .println(Thread.currentThread().getName() + " to insert " + data + " in BlockingQueue");
+    /* using while loop with condition to wait() is a best practice that is followed as Java doesn't guarantee that a thread will be woken up by only notify() or notifyAll()
+     * with while loop, even if the thread wakes up, we make sure whether the condition on which it was waiting is satisfied or not
+     * https://stackoverflow.com/questions/1038007/why-should-wait-always-be-called-inside-a-loop
+     */
     while (currSize >= size) {
       System.out.println(Thread.currentThread().getName() + " waiting for queue to have space");
       wait();
