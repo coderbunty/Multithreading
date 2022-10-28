@@ -33,6 +33,25 @@ public class CustomFixedThreadPoolExecutor implements Executor {
       workerThreads[i].start();
     }
   }
+  
+  /*
+  public CustomFixedThreadPoolExecutor(int numOfThreads) {
+    bq = new LinkedBlockingQueue<>();
+    workerThreads = new Thread[numOfThreads];
+    for (int i = 0; i < numOfThreads; i++) {
+      workerThreads[i] = new Thread(() -> {
+        while (true) {
+          try {
+            bq.take().run();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      workerThreads[i].start();
+    }
+  }
+  */
 
   @Override
   public void execute(Runnable command) {
