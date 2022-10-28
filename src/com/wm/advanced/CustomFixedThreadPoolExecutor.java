@@ -24,6 +24,8 @@ public class CustomFixedThreadPoolExecutor implements Executor {
 
   private final BlockingQueue<Runnable> bq;
   private final Thread[] workerThreads;
+  
+  private volatile boolean exit;
 
   public CustomFixedThreadPoolExecutor(int numOfThreads) {
     bq = new LinkedBlockingQueue<>();
@@ -63,7 +65,8 @@ public class CustomFixedThreadPoolExecutor implements Executor {
   }
   
   public void shutdown() {
-    // to be implemented - need to stop all the running threads (one option is thread.interrupt()) 
+    exit = true;
+    // check if thread.interrupt() can somehow be used - https://www.baeldung.com/java-thread-stop
   }
 
   private class Worker extends Thread {
@@ -74,7 +77,7 @@ public class CustomFixedThreadPoolExecutor implements Executor {
 
     @Override
     public void run() {
-      while (true) {
+      while (!exit) {
         try {
           bq.take().run();
         } catch (InterruptedException e) {
