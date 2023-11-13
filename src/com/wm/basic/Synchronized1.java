@@ -41,6 +41,7 @@ public class Synchronized1 {
 
         // without this block, 'counter' would have been printed as 0 (or some small number) as still the threads wouldn't
         // have completed running and main thread would have finished
+        // even without join(), t1 & t2 would run & complete, it is just that main thread wouldn't have been able to print the final value
         try {
             t1.join();	// waits for t1 to finish (t1 & t2 are already running at this time)
             t2.join();	// waits for t2 to finish (t2 might still be running at this time)
